@@ -1,11 +1,29 @@
 {
   "name": "dulce_blog_api",
-  "version": "1.0.0",
+  "version": "0.9.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon -r dotenv/config index.js"
   },
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "cloudinary": "^2.3.0",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "express-bearer-token": "^2.4.0",
+    "helmet": "^7.1.0",
+    "js-sha512": "^0.9.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.5.0",
+    "slugify": "^1.6.6",
+    "yup": "^1.4.0",
+    "yup-locales": "^1.2.24"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.5",
+    "nodemon": "^3.1.4"
+  }
 }
