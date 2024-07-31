@@ -9,7 +9,7 @@ const slugifyOptions = {
 
 async function create(data) {
 
-  const imageUrl = uploadImage(data.image.path, data._id)
+  const imageUrl = await uploadImage(data.image)
 
   data.image = imageUrl
 
@@ -21,8 +21,8 @@ async function create(data) {
   if (!data.excerpt) {
     data.excerpt = stripTags(data.content).substring(0, 100)
   }
-  if (!data.tags) {
-    data.tags = []
+  if (!data.subcategories) {
+    data.subcategories = []
   }
 
   return await new ArticleModel(data).save()
@@ -31,14 +31,14 @@ async function create(data) {
 async function list(onlyEnabled = true) {
   const params = {}
   if (onlyEnabled) params.enabled = true
-  return await ArticleModel.find(params).order({ createdAt: 'desc' }).exec()
+  return await ArticleModel.find(params).sort({ createdAt: 'asc' }).exec()
 }
 
-async function listBySubcategorySlug(categorySlug, onlyEnabled = true) {
+async function listBySubcategorySlug(subcategorySlug, onlyEnabled = true) {
   const params = {}
   if (onlyEnabled) params.enabled = true
-  if (categorySlug) params.subcategories[0] = categorySlug
-  return await ArticleModel.find(params).order({ createdAt: 'desc' }).exec()
+  if (subcategorySlug) params.subcategories[0] = subcategorySlug
+  return await ArticleModel.find(params).sort({ createdAt: 'asc' }).exec()
 }
 
 async function getOne(id, onlyEnabled = true) {
@@ -55,10 +55,18 @@ async function getOneBySlug(slug, onlyEnabled = true) {
 
 async function update(id, data) {
 
+  if (data.image) {
+    const imageUrl = await uploadImage(data.image)
+    data.image = imageUrl
+  }
+
   if (data.title && !data.slug) {
     data.slug = slugify(data.title, slugifyOptions)
   }
-  data.slug = slugify(data.slug, slugifyOptions)
+  else if (data.slug) {
+    data.slug = slugify(data.slug, slugifyOptions)
+  }
+
   if (data.content && !data.excerpt) {
     data.excerpt = stripTags(data.content).substring(0, 100)
   }

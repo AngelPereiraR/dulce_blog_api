@@ -8,6 +8,7 @@ const schema = yup.object({
   password: yup.string().required().min(6).label('Contraseña'),
   firstname: yup.string().required().min(3).label('Nombre'),
   lastname: yup.string().required().min(3).label('Apellido(s)'),
+  enabled: yup.boolean().optional().nullable().default(true).label('Activado')
 })
 
 export const createUserValidations = async (req, res, next) => {

@@ -19,7 +19,7 @@ async function create(data) {
 async function list(onlyEnabled = true) {
   const params = {}
   if (onlyEnabled) params.enabled = true
-  return await SubcategoryModel.find(params).order({ created_at: 'desc' }).exec()
+  return await SubcategoryModel.find(params).sort({ created_at: 'asc' }).exec()
 }
 
 async function getOne(id, onlyEnabled = true) {

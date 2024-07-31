@@ -8,17 +8,27 @@ import { validateObjectIdFormat } from '../validations/validateObjectIdFormat.js
 import { createUserToken } from '../utils/createUserToken.js'
 import { sessionChecker } from '../security/sessionChecker.js'
 import { ForbiddenError } from '../errors/ForbiddenError.js'
+import slugify from 'slugify'
 
 const usersController = express.Router()
 
 usersController.route('/users')
-  .post(createUserValidations, async (req, res) => {
+  .post(createUserValidations, async (req, res, next) => {
+    try {
+      const existingUser = await usersRepository.getOneByEmail(req.curatedBody.email)
 
-    const createdItem = await usersRepository.create(req.curatedBody)
+      if (existingUser) {
+        return res.status(400).json({ message: 'Ya hay un usuario existente con esa dirección de correo' })
+      }
 
-    delete createdItem.password
+      const createdItem = await usersRepository.create(req.curatedBody)
 
-    res.status(201).json(createdItem)
+      delete createdItem.password
+
+      res.status(201).json(createdItem)
+    } catch (e) {
+      next(e)
+    }
   })
   .get(sessionChecker(['admin'], true), async (req, res) => {
     const itemList = await usersRepository.list()
@@ -38,7 +48,7 @@ usersController.route('/users/logins')
     const user = await usersRepository.getOneByEmailAndPassword(userEmail, receivedPasswordHash)
 
     if (!user) {
-      return res.status(401).json({ message: 'usuario y/o contraseña incorrectos' })
+      return res.status(401).json({ message: 'Usuario y/o contraseña incorrectos' })
     }
 
     const responseData = {
@@ -52,12 +62,12 @@ usersController.route('/users/:id')
   .get(sessionChecker(['admin'], true), validateObjectIdFormat(), async (req, res) => {
     const itemId = req.params.id
     if (!req.isAdminUser && itemId !== req.tokenData.id) {
-      next(new ForbiddenError('access not allowed'))
+      next(new ForbiddenError('Acceso no permitido'))
       return
     }
     const item = await usersRepository.getOne(itemId)
     if (!item) {
-      return res.status(404).json({ message: `item con id ${itemId} no encontrado` })
+      return res.status(404).json({ message: `Usuario con id ${itemId} no encontrado` })
     }
 
     delete item.password
@@ -67,14 +77,14 @@ usersController.route('/users/:id')
   .put(sessionChecker(['admin'], true), validateObjectIdFormat(), updateUserValidations, async (req, res) => {
     const itemId = req.params.id
     if (!req.isAdminUser && itemId !== req.tokenData.id) {
-      next(new ForbiddenError('access not allowed'))
+      next(new ForbiddenError('Acceso no permitido'))
       return
     }
 
     const item = await usersRepository.update(itemId, req.curatedBody)
 
     if (!item) {
-      return res.status(404).json({ message: `item con id ${itemId} no encontrado` })
+      return res.status(404).json({ message: `Usuario con id ${itemId} no encontrado` })
     }
 
     delete item.password
@@ -83,10 +93,14 @@ usersController.route('/users/:id')
   })
   .delete(sessionChecker(['admin'], true), validateObjectIdFormat(), async (req, res) => {
     const itemId = req.params.id
+    if (!req.isAdminUser && itemId !== req.tokenData.id) {
+      next(new ForbiddenError('Acceso no permitido'))
+      return
+    }
     const item = await usersRepository.remove(itemId)
 
     if (!item) {
-      return res.status(404).json({ message: `item con id ${itemId} no encontrado` })
+      return res.status(404).json({ message: `Usuario con id ${itemId} no encontrado` })
     }
 
     res.status(204).json()

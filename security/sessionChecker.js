@@ -9,37 +9,37 @@ export const sessionChecker = (allowedProfiles = [], isMandatory = true) => {
     const token = req.token || null
 
     // si no hay sesión y es obligatoria, cortamos ejecución y devolvemos error
-    if(!token && isMandatory) {
-      return next(new SessionRequiredError('session is required'))
+    if (!token && isMandatory) {
+      return next(new SessionRequiredError('La sesión es requerida'))
     }
 
     //si no hay sesión y es opcional, establecemos en la petición datos vacíos para el token y pasamos el testigo
-    if(!token && !isMandatory) {
+    if (!token && !isMandatory) {
       req.tokenData = null
       req.isAdminUser = false
 
       return next()
     }
 
-    try{
+    try {
       const JWT_SECRET = process.env.JWT_SECRET
       const tokenData = jwt.verify(token, JWT_SECRET)
 
-      if(!allowedProfiles.includes(tokenData.profile)){
-        return next(new ForbiddenError('access not allowed'))
+      if (!allowedProfiles.includes(tokenData.profile)) {
+        return next(new ForbiddenError('Acceso no permitido'))
       }
 
       const user = await usersRepository.getOne(tokenData.id)
 
-      if(!user){
-        return next(new ForbiddenError('access not allowed'))
+      if (!user) {
+        return next(new ForbiddenError('Acceso no permitido'))
       }
 
       req.tokenData = tokenData
       req.isAdminUser = tokenData.profile === 'admin'
 
       next()
-    }catch(err){
+    } catch (err) {
       next(err)
     }
   }

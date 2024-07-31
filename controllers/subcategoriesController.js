@@ -5,15 +5,25 @@ import { subcategoriesRepository } from '../repositories/subcategoriesRepository
 import { validateObjectIdFormat } from '../validations/validateObjectIdFormat.js'
 import { isValidObjectId } from 'mongoose'
 import { sessionChecker } from '../security/sessionChecker.js'
+import slugify from 'slugify'
 
 const subcategoriesController = express.Router()
 
 subcategoriesController.route('/subcategories')
-  .post(sessionChecker(['admin'], true), createSubcategoryValidations, async (req, res) => {
+  .post(sessionChecker(['admin'], true), createSubcategoryValidations, async (req, res, next) => {
+    try {
+      const existingSubcategory = await subcategoriesRepository.getOneBySlug(slugify(req.curatedBody.name, { lower: true }), false)
 
-    const createdItem = await subcategoriesRepository.create(req.curatedBody)
+      if (existingSubcategory) {
+        return res.status(400).json({ message: 'Ya hay una subcategoría existente con ese nombre' })
+      }
 
-    res.status(201).json(createdItem)
+      const createdItem = await subcategoriesRepository.create(req.curatedBody)
+
+      res.status(201).json(createdItem)
+    } catch (e) {
+      next(e)
+    }
   })
   .get(sessionChecker(['admin', 'user'], false), async (req, res) => {
     const onlyEnabled = !req.isAdminUser
@@ -36,7 +46,7 @@ subcategoriesController.route('/subcategories/:id')
     }
 
     if (!item) {
-      return res.status(404).json({ message: `item con id ${itemId} no encontrado` })
+      return res.status(404).json({ message: `Subcategoría con id ${itemId} no encontrada` })
     }
 
     res.json(item)
@@ -46,7 +56,7 @@ subcategoriesController.route('/subcategories/:id')
     const item = await subcategoriesRepository.update(itemId, req.curatedBody)
 
     if (!item) {
-      return res.status(404).json({ message: `item con id ${itemId} no encontrado` })
+      return res.status(404).json({ message: `Subcategoría con id ${itemId} no encontrada` })
     }
 
     res.json(item)
@@ -56,7 +66,7 @@ subcategoriesController.route('/subcategories/:id')
     const item = await subcategoriesRepository.remove(itemId)
 
     if (!item) {
-      return res.status(404).json({ message: `item con id ${itemId} no encontrado` })
+      return res.status(404).json({ message: `Subcategoría con id ${itemId} no encontrada` })
     }
 
     res.status(204).json()

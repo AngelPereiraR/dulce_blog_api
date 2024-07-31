@@ -3,28 +3,23 @@ import { es } from 'yup-locales'
 
 yup.setLocale(es)
 //estructura de la información que vamos a validar
-const schema = yup.object({
-  title: yup.string().required().label('Título'),
+const updateArticleSchema = yup.object({
+  title: yup.string().optional().label('Título'),
   slug: yup.string().optional().nullable().label('Fragmento URL'),
-  image: yup.string().required().label('Imagen'),
+  image: yup.string().optional().label('Imagen'),
   excerpt: yup.string().optional().max(100).label('Entradilla'),
-  content: yup.string().required().min(100).label('Contenido'),
+  content: yup.string().optional().min(100).label('Contenido'),
   subcategories: yup.array().of(yup.object({
-    name: yup.string().required().label('Nombre'),
-    slug: yup.string().optional().nullable().label('Fragmento URL'),
-    enabled: yup.bool().optional().default(false)
-  })).optional().min(1).default([]).label('Subcategorías'),
+    _id: yup.string().required().label('ID de la subcategoría'),
+    name: yup.string().required().label('Nombre de la subcategoría'),
+    slug: yup.string().required().label('Fragmento URL de la subcategoría'),
+    enabled: yup.bool().required().label('Activado de la subcategoría'),
+    created_at: yup.string().required().label('Fecha de creación de la subcategoría'),
+    updated_at: yup.string().required().label('Fecha de actualización de la subcategoría')
+  })).optional().min(1).label('Subcategorías'),
   author: yup.string().optional().default('Dulce'),
   published_at: yup.date().optional(),
   enabled: yup.bool().optional().default(false)
 })
 
-export const updateArticleValidations = async (req, res, next) => {
-  try {
-    const data = await schema.validate(req.body, { abortEarly: false, stripUnknown: true })
-    req.curatedBody = data
-    next()
-  } catch (e) {
-    next(e)
-  }
-}
+export { updateArticleSchema }

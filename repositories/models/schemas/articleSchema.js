@@ -9,11 +9,13 @@ export const articleSchema = new Schema({
   subcategories: [{
     _id: { type: String, required: true },
     name: { type: String, required: true },
-    slug: { type: String, required: true, unique: true },
-    enabled: { type: Boolean, required: true }
+    slug: { type: String, required: true },
+    enabled: { type: Boolean, required: true },
+    created_at: { type: String, required: true },
+    updated_at: { type: String, required: true }
   }],
   author: { type: String, required: true },
-  published_at: { type: Date, required: true },
+  published_at: { type: Date, required: false },
   enabled: { type: Boolean, default: false }
 },
   { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }

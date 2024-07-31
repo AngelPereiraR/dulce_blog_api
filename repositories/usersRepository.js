@@ -8,7 +8,7 @@ async function create(data) {
 }
 
 async function list() {
-  return await UserModel.find().sort({ created_at: 'desc' }).exec()
+  return await UserModel.find().sort({ created_at: 'asc' }).exec()
 }
 
 async function getOne(id, onlyEnabled = true) {
@@ -25,6 +25,12 @@ async function update(id, data) {
   return await UserModel.findOneAndUpdate({ _id: id }, data, { new: true, runValidators: true }).exec()
 }
 
+async function getOneByEmail(email, onlyEnabled = true) {
+  const params = { email: email }
+  if (onlyEnabled) params.enabled = true
+  return await UserModel.findOne(params).exec()
+}
+
 async function getOneByEmailAndPassword(email, password) {
   return await UserModel.findOne({ email, password, enabled: true }).exec()
 }
@@ -35,5 +41,6 @@ export const usersRepository = {
   getOne,
   remove,
   update,
-  getOneByEmailAndPassword
+  getOneByEmailAndPassword,
+  getOneByEmail
 }

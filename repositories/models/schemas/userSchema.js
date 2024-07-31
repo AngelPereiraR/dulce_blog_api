@@ -9,7 +9,7 @@ export const userSchema = new Schema({
   firstname: { type: String, required: true },
   lastname: { type: String, required: true },
   profile: { type: String, enum: allowedUserProfiles, default: DEFAULT_USER_PROFILE },
-  enabled: { type: Boolean, required: true }
+  enabled: { type: Boolean, required: true, default: true }
 },
   {
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
