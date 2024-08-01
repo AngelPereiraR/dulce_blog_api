@@ -61,7 +61,7 @@ usersController.route('/users/logins')
   })
 
 usersController.route('/users/checks')
-  .post(sessionChecker(['admin'], true), async (req, res) => {
+  .post(sessionChecker(['admin'], true), (req, res) => {
     const user = req.user
     const token = req.token
 

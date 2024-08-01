@@ -12,7 +12,7 @@ export function customErrorHandler(err, req, res, next) {
   if (err instanceof ValidationError) {
     res.status(400).json({ message: "validation error", errors: err.errors || [] })
   } else if (err instanceof BadRequestError) {
-    res.status(400).json({ message: "validation error", errors: [err.message] })
+    res.status(400).json({ message: "bad request error", errors: [err.message] })
   } else if (err instanceof SessionRequiredError) {
     res.status(401).json({ message: err.message })
   } else if (err instanceof jwt.JsonWebTokenError) {
