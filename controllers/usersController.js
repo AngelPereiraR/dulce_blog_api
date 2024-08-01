@@ -8,7 +8,6 @@ import { validateObjectIdFormat } from '../validations/validateObjectIdFormat.js
 import { createUserToken } from '../utils/createUserToken.js'
 import { sessionChecker } from '../security/sessionChecker.js'
 import { ForbiddenError } from '../errors/ForbiddenError.js'
-import slugify from 'slugify'
 
 const usersController = express.Router()
 
@@ -51,8 +50,24 @@ usersController.route('/users/logins')
       return res.status(401).json({ message: 'Usuario y/o contraseña incorrectos' })
     }
 
+    delete user.password
+
     const responseData = {
-      jwt: createUserToken(user)
+      user: user,
+      token: createUserToken(user)
+    }
+
+    res.status(201).json(responseData)
+  })
+
+usersController.route('/users/checks')
+  .post(sessionChecker(['admin'], true), async (req, res) => {
+    const user = req.user
+    const token = req.token
+
+    const responseData = {
+      user: user,
+      token: token
     }
 
     res.status(201).json(responseData)

@@ -37,6 +37,7 @@ export const sessionChecker = (allowedProfiles = [], isMandatory = true) => {
 
       req.tokenData = tokenData
       req.isAdminUser = tokenData.profile === 'admin'
+      req.user = user
 
       next()
     } catch (err) {
