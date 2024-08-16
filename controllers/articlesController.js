@@ -17,8 +17,11 @@ articlesController.route('/articles')
       form.parse(req, async (err, fields, files) => {
         req.curatedBody = fields
 
-        if (files && files.image) {
-          req.curatedBody.image = files.image[0].filepath;
+        if (files && files.images) {
+          req.curatedBody.images = []
+          for (let i = 0; i < files.images.length; i++) {
+            req.curatedBody.images.push(files.images[i].filepath)
+          }
         }
 
         if (fields.title) req.curatedBody.title = fields.title.toString()
@@ -56,7 +59,18 @@ articlesController.route('/articles')
   })
   .get(sessionChecker(['admin', 'user'], false), async (req, res) => {
     const onlyEnabled = !req.isAdminUser
-    const itemList = await articlesRepository.list(onlyEnabled)
+    const subcategorySlug = req.query.subcategorySlug
+    let itemList = null
+
+    if (subcategorySlug) {
+      itemList = await articlesRepository.listBySubcategorySlug(subcategorySlug)
+    } else {
+      itemList = await articlesRepository.list(onlyEnabled)
+    }
+
+    if (itemList.length === 0) {
+      return res.status(404).json({ message: `No se ha encontrado ningún artículo perteneciente a esa subcategoría` })
+    }
 
     res.json(itemList)
   })

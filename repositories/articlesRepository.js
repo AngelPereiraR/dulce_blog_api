@@ -9,9 +9,16 @@ const slugifyOptions = {
 
 async function create(data) {
 
-  const imageUrl = await uploadImage(data.image)
+  const imagesUrl = []
 
-  data.image = imageUrl
+  if (data.images) {
+    for (let i = 0; i < data.images.length; i++) {
+      const imageUrl = await uploadImage(data.images[i])
+      imagesUrl.push(imageUrl)
+    }
+  }
+
+  data.images = imagesUrl
 
   if (!data.slug) {
     data.slug = slugify(data.title, slugifyOptions)
@@ -35,10 +42,19 @@ async function list(onlyEnabled = true) {
 }
 
 async function listBySubcategorySlug(subcategorySlug, onlyEnabled = true) {
-  const params = {}
-  if (onlyEnabled) params.enabled = true
-  if (subcategorySlug) params.subcategories[0] = subcategorySlug
-  return await ArticleModel.find(params).sort({ createdAt: 'asc' }).exec()
+  const articles = await list(onlyEnabled)
+
+  const articlesList = []
+
+  for (let i = 0; i < articles.length; i++) {
+    for (let j = 0; j < articles[i].subcategories.length; j++) {
+      if (articles[i].subcategories[j].slug === subcategorySlug) {
+        articlesList.push(articles[i])
+      }
+    }
+  }
+
+  return articlesList;
 }
 
 async function getOne(id, onlyEnabled = true) {

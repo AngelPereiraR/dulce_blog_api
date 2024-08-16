@@ -6,7 +6,7 @@ yup.setLocale(es)
 const createArticleSchema = yup.object({
   title: yup.string().required().label('Título'),
   slug: yup.string().optional().nullable().label('Fragmento URL'),
-  image: yup.string().required().label('Imagen'),
+  images: yup.array().of(yup.string().required()).optional().min(1).label('Imágenes'),
   excerpt: yup.string().optional().max(100).label('Entradilla'),
   content: yup.string().required().min(100).label('Contenido'),
   subcategories: yup.array().of(yup.object({
