@@ -11,9 +11,7 @@ import { subcategoriesController } from "./controllers/subcategoriesController.j
 import { categoriesController } from "./controllers/categoriesController.js";
 import { articlesController } from "./controllers/articlesController.js";
 
-export const config = {
-  runtime: 'nodejs',
-};
+export const config = 'nodejs'
 
 const app = express()
 const port = process.env.PORT || 8080
