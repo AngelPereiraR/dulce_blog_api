@@ -12,7 +12,7 @@ import { categoriesController } from "./controllers/categoriesController.js";
 import { articlesController } from "./controllers/articlesController.js";
 
 export const config = {
-  runtime: 'edge',
+  runtime: 'nodejs',
 };
 
 const app = express()
