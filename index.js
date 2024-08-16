@@ -44,4 +44,4 @@ try {
   console.error(e)
 }
 
-module.exports = app
+export default app
