@@ -43,3 +43,5 @@ try {
   console.error("Error conectando a la base de datos, no se levantará el servidor")
   console.error(e)
 }
+
+module.exports = app
