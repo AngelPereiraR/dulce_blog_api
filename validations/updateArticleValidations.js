@@ -8,7 +8,7 @@ const updateArticleSchema = yup.object({
   slug: yup.string().optional().nullable().label('Fragmento URL'),
   images: yup.array().of(yup.string().required()).optional().min(1).label('Imágenes'),
   excerpt: yup.string().optional().max(100).label('Entradilla'),
-  content: yup.string().optional().min(100).label('Contenido'),
+  content: yup.string().optional().min(10).label('Contenido'),
   subcategories: yup.array().of(yup.object({
     _id: yup.string().required().label('ID de la subcategoría'),
     name: yup.string().required().label('Nombre de la subcategoría'),
