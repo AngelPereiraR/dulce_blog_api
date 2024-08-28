@@ -6,10 +6,5 @@
       "use": "@vercel/node"
     }
   ],
-  "rewrites": [{ "source": "/(.*)", "destination": "index.js" }],
-  "functions": {
-    "*.js": {
-      "maxDuration": 30
-    }
-  }
+  "rewrites": [{ "source": "/(.*)", "destination": "index.js" }]
 }
