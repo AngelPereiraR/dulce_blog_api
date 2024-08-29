@@ -22,9 +22,9 @@ async function create(data) {
       const imageUrl = await uploadImage(data.images[i])
       imagesUrl.push(imageUrl)
     }
-  }
 
-  data.images = imagesUrl
+    data.images = imagesUrl
+  }
 
   if (!data.slug) {
     data.slug = slugify(data.title, slugifyOptions)
@@ -84,9 +84,9 @@ async function update(id, data) {
       const imageUrl = await uploadImage(data.images[i])
       imagesUrl.push(imageUrl)
     }
-  }
 
-  data.images = imagesUrl
+    data.images = imagesUrl
+  }
 
   if (data.title && !data.slug) {
     data.slug = slugify(data.title, slugifyOptions)
