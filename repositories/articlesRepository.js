@@ -77,8 +77,6 @@ async function getOneBySlug(slug, onlyEnabled = true) {
 
 async function update(id, data) {
 
-  console.log(data)
-
   const imagesUrl = []
 
   if (data.images) {
