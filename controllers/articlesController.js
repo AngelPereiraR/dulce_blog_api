@@ -101,8 +101,11 @@ articlesController.route('/articles/:id')
       form.parse(req, async (err, fields, files) => {
         req.curatedBody = fields
 
-        if (files && files.image) {
-          req.curatedBody.image = files.image[0].filepath;
+        if (files && files.images) {
+          req.curatedBody.images = []
+          for (let i = 0; i < files.images.length; i++) {
+            req.curatedBody.images.push(files.images[i].filepath)
+          }
         }
 
         if (fields.title) req.curatedBody.title = fields.title.toString()
