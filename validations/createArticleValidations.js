@@ -19,7 +19,8 @@ const createArticleSchema = yup.object({
   })).optional().min(1).label('Subcategorías'),
   author: yup.string().optional().default('Dulce'),
   published_at: yup.date().optional(),
-  enabled: yup.bool().optional().default(false)
+  enabled: yup.bool().optional().default(false),
+  orderNumber: yup.number().optional()
 })
 
 export { createArticleSchema }

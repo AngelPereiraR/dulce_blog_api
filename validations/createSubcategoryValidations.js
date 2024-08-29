@@ -6,7 +6,8 @@ yup.setLocale(es)
 const schema = yup.object({
   name: yup.string().required().label('Nombre'),
   slug: yup.string().optional().nullable().label('Fragmento URL'),
-  enabled: yup.bool().optional().default(false)
+  enabled: yup.bool().optional().default(false),
+  orderNumber: yup.number().optional()
 })
 
 export const createSubcategoryValidations = async (req, res, next) => {

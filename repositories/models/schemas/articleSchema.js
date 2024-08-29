@@ -16,7 +16,8 @@ export const articleSchema = new Schema({
   }],
   author: { type: String, required: true },
   published_at: { type: Date, required: false },
-  enabled: { type: Boolean, default: false }
+  enabled: { type: Boolean, default: false },
+  orderNumber: { type: Number, required: true },
 },
   { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 )

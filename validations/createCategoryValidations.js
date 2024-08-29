@@ -14,7 +14,8 @@ const schema = yup.object({
     created_at: yup.string().required().label('Fecha de creación de la subcategoría'),
     updated_at: yup.string().required().label('Fecha de actualización de la subcategoría')
   })).optional().min(1).label('Subcategorías'),
-  enabled: yup.bool().optional().default(false)
+  enabled: yup.bool().optional().default(false),
+  orderNumber: yup.number().optional()
 })
 
 export const createCategoryValidations = async (req, res, next) => {

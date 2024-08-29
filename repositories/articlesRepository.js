@@ -9,6 +9,12 @@ const slugifyOptions = {
 
 async function create(data) {
 
+  const articles = list()
+
+  if (articles) {
+    data.orderNumber = articles.length + 1
+  }
+
   const imagesUrl = []
 
   if (data.images) {
@@ -71,10 +77,16 @@ async function getOneBySlug(slug, onlyEnabled = true) {
 
 async function update(id, data) {
 
-  if (data.image) {
-    const imageUrl = await uploadImage(data.image)
-    data.image = imageUrl
+  const imagesUrl = []
+
+  if (data.images) {
+    for (let i = 0; i < data.images.length; i++) {
+      const imageUrl = await uploadImage(data.images[i])
+      imagesUrl.push(imageUrl)
+    }
   }
+
+  data.images = imagesUrl
 
   if (data.title && !data.slug) {
     data.slug = slugify(data.title, slugifyOptions)

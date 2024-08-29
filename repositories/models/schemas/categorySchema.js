@@ -9,7 +9,8 @@ export const categorySchema = new Schema({
     slug: { type: String, required: true },
     enabled: { type: Boolean, required: true },
     created_at: { type: String, required: true },
-    updated_at: { type: String, required: true }
+    updated_at: { type: String, required: true },
+    orderNumber: { type: Number, required: true },
   }],
   enabled: { type: Boolean, required: true }
 },

@@ -7,6 +7,12 @@ const slugifyOptions = {
 
 async function create(data) {
 
+  const subcategories = list()
+
+  if (subcategories) {
+    data.orderNumber = subcategories.length + 1
+  }
+
   if (!data.slug) {
     data.slug = slugify(data.name, slugifyOptions)
   } else {
