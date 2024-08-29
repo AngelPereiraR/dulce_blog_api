@@ -94,7 +94,7 @@ articlesController.route('/articles/:id')
 
     res.json(item)
   })
-  .put(sessionChecker(['admin'], true), validateObjectIdFormat(), async (req, res) => {
+  .patch(sessionChecker(['admin'], true), validateObjectIdFormat(), async (req, res) => {
     const itemId = req.params.id
     try {
       const form = formidable({ multiples: true });
@@ -121,6 +121,7 @@ articlesController.route('/articles/:id')
         }
         if (fields.author) req.curatedBody.author = fields.author.toString()
         if (fields.published_at) req.curatedBody.published_at = fields.published_at.toString()
+        if (fields.orderNumber) req.curatedBody.order_number = fields.orderNumber.toString()
 
         const validatedData = await updateArticleSchema.validate(req.curatedBody, { abortEarly: false, stripUnknown: true });
 

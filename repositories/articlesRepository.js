@@ -99,6 +99,10 @@ async function update(id, data) {
     data.excerpt = stripTags(data.content).substring(0, 100)
   }
 
+  if (data.orderNumber) {
+    data.orderNumber = parseInt(data.orderNumber)
+  }
+
   return await ArticleModel.findOneAndUpdate({ _id: id }, data, { new: true, runValidators: true }).exec()
 }
 

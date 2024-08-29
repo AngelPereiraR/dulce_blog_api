@@ -47,6 +47,10 @@ async function update(id, data) {
   }
   data.slug = slugify(data.slug, slugifyOptions)
 
+  if (data.orderNumber) {
+    data.orderNumber = parseInt(data.orderNumber)
+  }
+
   return await CategoryModel.findOneAndUpdate({ _id: id }, data, { new: true, runValidators: true }).exec()
 }
 

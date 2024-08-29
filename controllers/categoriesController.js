@@ -51,7 +51,7 @@ categoriesController.route('/categories/:id')
 
     res.json(item)
   })
-  .put(sessionChecker(['admin'], true), validateObjectIdFormat(), updateCategoryValidations, async (req, res) => {
+  .patch(sessionChecker(['admin'], true), validateObjectIdFormat(), updateCategoryValidations, async (req, res) => {
     const itemId = req.params.id
     const item = await categoriesRepository.update(itemId, req.curatedBody)
 
