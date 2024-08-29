@@ -12,7 +12,7 @@ export const categorySchema = new Schema({
     updated_at: { type: String, required: true },
     orderNumber: { type: Number, required: true },
   }],
-  enabled: { type: Boolean, required: true }
+  enabled: { type: Boolean, required: false }
 },
   {
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }

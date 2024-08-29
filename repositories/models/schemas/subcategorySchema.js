@@ -4,7 +4,7 @@ export const subcategorySchema = new Schema({
   name: { type: String, required: true },
   slug: { type: String, required: true, unique: true },
   enabled: { type: Boolean, required: true },
-  orderNumber: { type: Number, required: true },
+  orderNumber: { type: Number, required: false },
 },
   {
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }

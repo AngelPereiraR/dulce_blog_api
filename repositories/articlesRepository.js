@@ -9,7 +9,7 @@ const slugifyOptions = {
 
 async function create(data) {
 
-  const articles = list()
+  const articles = await list()
 
   if (articles) {
     data.orderNumber = articles.length + 1
