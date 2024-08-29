@@ -7,7 +7,7 @@ const slugifyOptions = {
 
 async function create(data) {
 
-  const subcategories = await list()
+  const subcategories = await list(false)
 
   if (subcategories) {
     data.orderNumber = subcategories.length + 1
